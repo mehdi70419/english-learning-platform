@@ -1,0 +1,45 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Pytest cache
+.pytest_cache/
+
+# IDE configuration
+.idea/
+.vscode/
+
+# Log files
+*.log
+
+# Local databases and backups
+*.db
+*.sqlite3
+*.backup
+*.dump
+
+# Test and coverage reports
+.coverage
+htmlcov/
+
+
+# Personal notes and backup files
+main_recovered_backup.py
+project_learning_notes
+/roadmap 3
+/roadmap2
+/roadmap_from_here
+/grammar endpoints remained
+
+# Empty, unused model files
+lesson_progress_model.py
+quiz_attempt.py
