@@ -122,19 +122,6 @@ def read_courses(db:Session = Depends(get_db)):
                                           ,joinedload(Course.lessons).joinedload(Lesson.vocabularies)).all()
     return db_courses
 
-########temporary lazy loading endpoint
-@app.get("/courses/all",response_model=list[PublicCourse])
-def read_all_courses_lazily(db:Session = Depends(get_db)):
-    db_courses =db.query(Course).all()
-    return db_courses
-
-######### temporarily designed to check eager loading selectinload
-@app.get("/courses/allall",response_model=list[PublicCourse])
-def read_all_courses_through_selectinload(db:Session = Depends(get_db)):
-    db_courses =db.query(Course).options(selectinload(Course.lessons).selectinload(Lesson.exercises).selectinload(Exercise.questions)
-                          ,selectinload(Course.lessons).selectinload(Lesson.vocabularies)).all()
-    return db_courses
-
 
 
 @app.get("/courses/{course_id}",response_model=PublicCourse)
@@ -308,23 +295,6 @@ def user_get_his_profile(profile_id:int,current_user:User = Depends(get_current_
         raise HTTPException(status_code=403,detail="you are not authorized")
     return db_profile
 
-# TEMPORARY LEARNING ENDPOINT
-# Purpose: demonstrate IntegrityError → rollback → HTTP 409
-# Remove before production
-@app.post("/profile/hardcoded")
-def hardcoded_profile(profile:CreateProfile,db:Session = Depends(get_db)):
-    db_profile=Profile(first_name=profile.first_name,last_name=profile.last_name,bio=profile.bio,avatar_url=profile.avatar_url,
-                       native_language=profile.native_language,
-                       learning_level=profile.learning_level,
-                       user_id=4)
-    db.add(db_profile)
-    try:
-       db.commit()
-       db.refresh(db_profile)
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=409,detail="Hardcoded profile already exists")
-    return db_profile
 
 @app.post("/lessons/{lesson_id}/vocabularies",response_model=PublicVocabulary)
 def admin_assign_vocabulary_to_lesson(lesson_id:int,vocabulary:CreateVocabulary,current_user:User = Depends(get_current_admin),db:Session = Depends(get_db)):
@@ -2168,7 +2138,7 @@ def user_get_charts_of_study_time(period:str,db: Session = Depends(get_db),curre
         return list_of_study_time_for_each_hour
 
 
-    if period == "daily":
+    elif period == "daily":
        today = datetime.now(timezone.utc)
        beginning_of_today = today.replace(hour=0, minute=0, second=0, microsecond=0)
        beginning_of_tomorrow = beginning_of_today + timedelta(days=1)
@@ -2423,6 +2393,9 @@ def user_get_charts_of_study_time(period:str,db: Session = Depends(get_db),curre
 
         return list_of_study_times_for_each_year
 
+    else:
+        raise HTTPException(status_code=400,detail="Invalid period. Choose hourly, daily, weekly, monthly, or yearly.")
+        
 
 
 
@@ -2648,6 +2621,11 @@ def user_get_charts_of_quiz_performance(period:str,current_user:User = Depends(g
                                                 "accuracy_percentage" :accuracy_percentage_of_each_year,
                                                  "date" : y.date() } )
         return yearly_quiz_performance
+    
+    else:
+        raise HTTPException(status_code=400,detail="Invalid period.Choose daily, weekly, monthly, or yearly.")
+        
+
 
 
 
@@ -2853,6 +2831,11 @@ def user_get_chart_of_free_discussion_registration(period:str,current_user:User 
                                                          "date" : y.date() } )
 
         return yearly_registration_cancellation_report
+        
+    else:
+        raise HTTPException(status_code=400,detail="Invalid period.Choose daily, weekly, monthly, or yearly.")
+        
+
 
 
 
