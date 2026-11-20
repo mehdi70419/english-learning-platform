@@ -1,6 +1,3 @@
-import token
-
-
 def calculate_study_duration(start_minutes, end_minutes):
     return end_minutes - start_minutes
 
@@ -24,8 +21,6 @@ def test_login_user(client):
     response = client.post( "/login",
                             data={  "username": "admin_test",
                                  "password": "testpassword123"})
-    print(response.json())
-    token = response.json()["access_token"]
 
     assert response.status_code == 200
 
@@ -35,7 +30,7 @@ def test_create_course(client):
         response = client.post("/login",
                                data={"username": "admin_test",
                                  "password": "testpassword123"})
-        print(response.json())
+        
         assert response.status_code == 200
         token = response.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
@@ -110,6 +105,7 @@ def test_assigning_a_lesson_to_course(client):
 def test_removing_a_lesson_from_course(client):
     response = client.post("/login",
                            data = { "username": "admin_test","password": "testpassword123" })
+    
     assert response.status_code == 200
     token = response.json()['access_token']
     headers = {"Authorization": f"Bearer {token}"}
@@ -122,6 +118,7 @@ def test_removing_a_lesson_from_course(client):
 def test_user_get_lessons(client):
     response = client.post("/login",
                            data={"username": "admin_test","password": "testpassword123" })
+    
     assert response.status_code == 200
     token = response.json()['access_token']
     headers = {"Authorization" : f"Bearer {token}"}
@@ -133,6 +130,7 @@ def test_user_get_lessons(client):
 def test_user_get_one_lesson(client):
     response = client.post("/login",
                            data = { "username": "admin_test","password": "testpassword123" })
+    
     assert response.status_code == 200
     token = response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
@@ -145,6 +143,7 @@ def test_user_get_one_lesson(client):
 def test_admin_update_lesson(client):
     response = client.post("/login",
                            data = { "username": "admin_test","password": "testpassword123" })
+    
     assert response.status_code == 200
     token = response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
@@ -160,6 +159,7 @@ def test_admin_update_lesson(client):
 def test_admin_delete_lesson(client):
     response = client.post("/login",
                            data={"username": "admin_test","password": "testpassword123" })
+    
     assert response.status_code == 200
     token = response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
@@ -173,9 +173,11 @@ def test_admin_delete_lesson(client):
 def test_admin_remove_a_lesson_from_a_course(client):
     response = client.post("/login",
                           data = { "username": "admin_test","password": "testpassword12" })
+    
     assert response.status_code == 200
     token = response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
+    
     response = client.post("/lessons/1/1",headers=headers )
     print(response.json())
     assert response.status_code == 200
@@ -183,6 +185,7 @@ def test_admin_remove_a_lesson_from_a_course(client):
 def test_admin_assign_profile_to_user(client):
     response = client.post("/login",
                            data = { "username": "admin_test","password": "testpassword123" })
+    
     assert response.status_code == 200
     token = response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
