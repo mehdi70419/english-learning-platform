@@ -14,7 +14,7 @@ if not db_url:
     raise RuntimeError("db_url is not configured")
 
 
-engine = create_engine(db_url,echo=True)
+engine = create_engine(db_url)
 
 Sessionlocal = sessionmaker(bind=engine)
 
