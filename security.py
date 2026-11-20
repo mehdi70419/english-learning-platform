@@ -16,6 +16,8 @@ pwd_context=CryptContext(schemes=["bcrypt"],deprecated="auto")
 load_dotenv()
 SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM=os.getenv("ALGORITHM")
+if not SECRET_KEY or not ALGORITHM:
+    raise RuntimeError("JWT configuration is missing")
 
 def create_access_token(data:dict):
     to_encode=data.copy()
