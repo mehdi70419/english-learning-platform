@@ -43,3 +43,9 @@ project_learning_notes
 # Empty, unused model files
 lesson_progress_model.py
 quiz_attempt.py
+
+
+
+.envrc
+*.pem
+*.key
