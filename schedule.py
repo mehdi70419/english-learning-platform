@@ -28,7 +28,7 @@ def background_task_function_called_by_scheduler():
         db.close()
 
 
-scheduler.add_job(background_task_function_called_by_schedular,
+scheduler.add_job(background_task_function_called_by_scheduler,
                        trigger="interval",
                        minutes=5
                        )
