@@ -18,7 +18,7 @@ scheduler = BackgroundScheduler()
 
 
 
-def background_task_function_called_by_schedular():
+def background_task_function_called_by_scheduler():
     db = Sessionlocal()
     try:
 
